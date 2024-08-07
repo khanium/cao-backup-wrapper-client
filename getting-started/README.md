@@ -13,11 +13,14 @@ For further information about setting file system groups see the persistent volu
 
 ---
 
-## Getting Started K8
+## Prerequisites
 
+Before you begin, ensure you have the following installed or using a running Kubernetes cluster:
 
 ### 0. Starting Kind as K8 cluster
 https://kind.sigs.k8s.io/docs/user/quick-start/
+
+![Target](../docs/assets/kind-cluster.png)
 
 ```console
 echo "0. starting Kubernetes cluster..."
@@ -36,12 +39,24 @@ nodes:
  - role: worker
 ```
 
+
+## Getting Started
+
+![Target](../docs/assets/CouchbaseCluster.png)
+
+### 0. Deploying Certificate Manager (Optional if you remove the TLS configuration)
+See [Using a Certificate Manager Couchbase Tutorial](https://docs.couchbase.com/operator/current/tutorial-cert-manager.html) and [cert-manager](https://cert-manager.io/) for more information.
+```console
+echo "0. Deploying Certificate Manager..."
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.2/cert-manager.yaml
+```
+
 ### 1. Operator
 Download Couchbase Operator & deploy Couchbase CRD, admission controller and operator services. 
 
 ```console
 echo "1. Installing Couchbase Operator..."
-cd cb-operator
+cd $OPERATOR_HOME
 kubectl create -f crd.yaml
 bin/cao create admission
 bin/cao create operator
@@ -49,8 +64,81 @@ bin/cao create operator
 
 ### 2. Grant Backup permissions
 
+```console
+echo "2. Granting Backup permissions..."
+bin/cao create backup 
 ```
-echo "2. Deploying Couchbase Cluster Server..."
-kubectl apply -f cb-cluster-backup.yaml
-kubectl get pods -w
+
+### 3. Deploy Couchbase Cluster
+
+```console
+cd getting-started/samples/backup
+echo "3. Deploying Couchbase Cluster Server..."
+```
+#### 3.1. Creating Couchbase Cluster Users Resources
+
+```console
+echo "   3.1. Creating Couchbase Cluster Users Resources..."
+kubectl apply -f cb-prod-00-users.yaml
+```
+
+#### 3.2. Creating Couchbase Cluster Buckets Resources
+
+```console
+echo "   3.2. Creating Couchbase Cluster Buckets Resources..."
+kubectl apply -f cb-prod-01-bucket.yaml 
+```
+
+#### 3.3. Creating Couchbase Cluster Security (TLS Certificates Configuration) Resources
+
+```console
+echo "   3.3. Creating Couchbase Cluster TLS Certificates Resources..."
+kubectl apply -f cb-prod-02-security.yaml
+```
+
+#### 3.4. Deploying Couchbase Cluster with backup operator Resources
+
+```console
+echo "   3.4. Deploying Couchbase Cluster Resources..."
+kubectl apply -f cb-prod-03-cluster.yaml
+```
+
+See that the CouchbaseCluster resource include the backup section:
+
+```yaml
+apiVersion: couchbase.com/v2
+kind: CouchbaseCluster
+metadata:
+  name: cluster1
+spec:
+  image: couchbase/server:7.6.2
+  # Always select RBAC rules based on a label to prevent unexpectedly picking up
+  # and unlabelled resources created in this namespace.
+  backup:
+    managed: true
+    image: couchbase/operator-backup:1.3.8
+    serviceAccountName: couchbase-backup
+   ...
+```
+
+### 4. Deploying Backup Plan & Repository Jobs
+
+```console
+echo "4. Setting up Backup Plan & Repository Jobs..."
+kubectl apply -f cb-prod-04-backup.yaml
+```
+Note that this sample backup plan includes the backup repository and schedules a full backup every hour and incremental backup every 10 minutes:
+
+```yaml
+apiVersion: couchbase.com/v2
+kind: CouchbaseBackup
+metadata:
+  name: my-backup
+spec:
+  strategy: full_incremental 
+  full:
+    schedule: "0 * * * *" 
+  incremental:
+    schedule: "0/10 * * * *" 
+  size: 20Gi 
 ```
