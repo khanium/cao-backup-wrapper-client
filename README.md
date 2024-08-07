@@ -83,8 +83,13 @@ cp -r gen/src/main/java/com/couchbase/ src/main/java/com/couchbase/
 ```console
 mvn spring-boot:run
 ```
-output::
+
 ![Output](docs/assets/output.png)
+
+### Available Rest Endpoints
+In your http://localhost:8080 you can access the following endpoints:
+
+![endpoints](docs/assets/endpoints.png)
 
 ## References
 
