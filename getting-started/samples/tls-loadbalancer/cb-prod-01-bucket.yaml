@@ -1,0 +1,18 @@
+# Buckets control the amount of data an application can use, and control how that
+# data is managed.  We need at least one data replica to ensure applications can
+# continue to work when a pod is evicted (usually for the purposes of Kubernetes
+# rolling upgrades, which should be carried out one every 3-4 months to ensure that
+# you are up to date with the latest security fixes from both Kubernetes and the
+# operator).
+apiVersion: couchbase.com/v2
+kind: CouchbaseBucket
+metadata:
+  name: bucket1
+  labels:
+    cluster: cluster1
+spec:
+  memoryQuota: 100Mi
+  replicas: 2
+  ioPriority: high
+  enableIndexReplica: true
+

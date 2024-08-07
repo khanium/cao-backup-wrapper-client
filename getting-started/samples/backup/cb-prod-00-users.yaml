@@ -1,0 +1,59 @@
+# Applications and the Operator are able to use this secret.
+# For security, normal users within the namespace should be prohibited
+# from access to Secrets.  It is up to the administrator to also
+# ensure the passwords are not leaked from the application.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: application1-authentication
+type: Opaque
+stringData:
+  password: pieWrewn5knyk&
+---
+# Applications should have a user that they can use, this allows
+# strong guarantees of safety when using RBAC.  While strictly not
+# necessary, the labels provide filtering so resources are only
+# picked up by specific clusters.
+apiVersion: couchbase.com/v2
+kind: CouchbaseUser
+metadata:
+  name: application1
+  labels:
+    cluster: cluster1
+spec:
+  authDomain: local
+  authSecret: application1-authentication
+---
+# Groups control what the application is allowed to do.  The administrator
+# should limit group permissions to only what is absolutely necessary to
+# allow the application to function.  It also restricts those permissions
+# to a specific bucket that the application needs to access. While strictly not
+# necessary, the labels provide filtering so resources are only
+# picked up by specific clusters.
+apiVersion: couchbase.com/v2
+kind: CouchbaseGroup
+metadata:
+  name: group1
+  labels:
+    cluster: cluster1
+spec:
+  roles:
+  - bucket: bucket1
+    name: bucket_full_access
+---
+# Role bindings are a bit of a misnomer.  They follow the behaviour of standard
+# kubernetes role bindings by creating a relationship between users and groups.
+apiVersion: couchbase.com/v2
+kind: CouchbaseRoleBinding
+metadata:
+  name: group1
+  labels:
+    cluster: cluster1
+spec:
+  roleRef:
+    kind: CouchbaseGroup
+    name: group1
+  subjects:
+  - kind: CouchbaseUser
+    name: application1
+

@@ -1,0 +1,61 @@
+apiVersion: couchbase.com/v2
+kind: CouchbaseCluster
+metadata:
+  name: cluster1
+spec:
+  image: couchbase/server:7.6.2
+  # Always enable anti-affinity to limit the "blast radius", and also ensure that any
+  # assumptions about data replication hold i.e. a Kubernetes node going down will only
+  # affect at most one pod.
+  # Always select RBAC rules based on a label to prevent unexpectedly picking up
+  # and unlabelled resources created in this namespace.
+  security:
+    adminSecret: administrator-authentication
+    rbac:
+      managed: true
+      selector:
+        matchLabels:
+          cluster: cluster1
+  # Always select buckets based on a label to prevent unexpectedly picking up
+  # and unlabelled resources created in this namespace.
+  buckets:
+    managed: true
+    selector:
+      matchLabels:
+        cluster: cluster1
+  cluster:
+    # Each service will be on its own pod, each pod will be on its own node.
+    dataServiceMemoryQuota: 1Gi
+    indexServiceMemoryQuota: 1Gi
+    queryServiceMemoryQuota: 1Gi
+    # Fast auto-failover ensures that replica data becomes live quickly and
+    # minimises impact for applications in the face of trouble or upgrades.
+    autoFailoverTimeout: 5s
+    autoFailoverOnDataDiskIssues: true
+    autoFailoverOnDataDiskIssuesTimePeriod: 5s
+  # Auto resource allocation takes the memory quotas defined in the cluster
+  # section and applies them to pods in the various server classes we will
+  # define in the servers section.  This manifests itself as Kubernetes
+  # resource requests that ensure fair scheduling of pods across your
+  # Kubernetes cluster.
+  autoResourceAllocation:
+    enabled: true
+  # Enable managed TLS to protect all data from eavesdropping.
+  networking:
+    tls:
+      secretSource:
+        serverSecretName: cluster1-server-tls
+  # Each server class will have its own storage template, this allows independent
+  # scaling as the need arises, and also minimises the number of pods that are
+  # affected by a particular change.  Do not under provision storage, use the high
+  # performance solid state variety.
+  # Each service is hosted on its own set of pods.  This facilitates simple independent
+  # scaling of services, simplifies memory allocation and reduces blast radius, affecting
+  # only a single service at a time.
+  servers:
+  - name: data_all
+    size: 3
+    services:
+    - data
+    - query
+    - index

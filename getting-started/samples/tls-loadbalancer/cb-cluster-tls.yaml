@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cb-demo-auth
+type: Opaque
+data:
+  username: QWRtaW5pc3RyYXRvcg== # Administrator
+  password: cGFzc3dvcmQ=         # password
+---
+apiVersion: couchbase.com/v2
+kind: CouchbaseBucket
+metadata:
+  name: demo
+---
+apiVersion: couchbase.com/v2
+kind: CouchbaseCluster
+metadata:
+  name: cb-demo
+spec:
+  image: couchbase/server:7.6.2
+  networking:
+    tls:
+      rootCAs:
+      - couchbase-server-ca
+      secretSource:
+        serverSecretName: couchbase-server-tls
+  security:
+    adminSecret: cb-demo-auth
+  buckets:
+    managed: true
+  servers:
+  - size: 3
+    name: data_query_services
+    services:
+    - data
+    - index
+    - query
