@@ -1,7 +1,7 @@
-package com.couchbase.caobackupserviceextension.backup;
+package com.couchbase.k8client.backup;
 
-import com.couchbase.caobackupserviceextension.pods.PodInfo;
-import com.couchbase.caobackupserviceextension.pods.PodService;
+import com.couchbase.k8client.pods.PodInfo;
+import com.couchbase.k8client.pods.PodService;
 import com.couchbase.v2.CouchbaseBackup;
 import com.couchbase.v2.CouchbaseBackupStatus;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;

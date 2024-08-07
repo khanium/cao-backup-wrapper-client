@@ -1,10 +1,10 @@
-package com.couchbase.caobackupserviceextension;
+package com.couchbase.k8client;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CaoBackupServiceExtensionApplicationTests {
+class K8BackupAppTests {
 
     @Test
     void contextLoads() {

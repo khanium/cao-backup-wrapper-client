@@ -1,4 +1,4 @@
-package com.couchbase.caobackupserviceextension.pods;
+package com.couchbase.k8client.pods;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

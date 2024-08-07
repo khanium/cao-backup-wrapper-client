@@ -1,11 +1,9 @@
-package com.couchbase.caobackupserviceextension.pods;
+package com.couchbase.k8client.pods;
 
-import com.couchbase.caobackupserviceextension.config.KubeConfigProperties;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j

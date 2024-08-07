@@ -1,10 +1,7 @@
-package com.couchbase.caobackupserviceextension.backup;
+package com.couchbase.k8client.backup;
 
 import com.couchbase.v2.CouchbaseBackup;
 import com.couchbase.v2.CouchbaseBackupSpec;
-import com.couchbase.v2.CouchbaseBackupStatus;
-import com.couchbase.v2.couchbasebackupstatus.Backups;
-import com.couchbase.v2.couchbaseclusterspec.Backup;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

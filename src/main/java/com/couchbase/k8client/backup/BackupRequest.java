@@ -1,4 +1,4 @@
-package com.couchbase.caobackupserviceextension.backup;
+package com.couchbase.k8client.backup;
 
 import lombok.Builder;
 import lombok.Data;

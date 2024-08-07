@@ -1,8 +1,6 @@
-package com.couchbase.caobackupserviceextension.config;
+package com.couchbase.k8client.config;
 
-import com.couchbase.caobackupserviceextension.backup.BackupService;
-import io.fabric8.kubernetes.client.Config;
-import io.fabric8.kubernetes.client.ConfigBuilder;
+import com.couchbase.k8client.backup.BackupService;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;

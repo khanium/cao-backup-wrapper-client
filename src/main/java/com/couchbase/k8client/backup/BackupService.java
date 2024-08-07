@@ -1,7 +1,6 @@
-package com.couchbase.caobackupserviceextension.backup;
+package com.couchbase.k8client.backup;
 
-import com.couchbase.caobackupserviceextension.config.KubeConfigProperties;
-import com.couchbase.caobackupserviceextension.pods.PodInfo;
+import com.couchbase.k8client.config.KubeConfigProperties;
 import com.couchbase.v2.CouchbaseBackup;
 import com.couchbase.v2.CouchbaseBackupStatus;
 import io.fabric8.kubernetes.api.model.KubernetesResourceList;
@@ -11,7 +10,6 @@ import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
-import io.fabric8.kubernetes.client.utils.internal.CreateOrReplaceHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

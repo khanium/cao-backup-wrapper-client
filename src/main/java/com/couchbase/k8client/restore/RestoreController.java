@@ -1,4 +1,4 @@
-package com.couchbase.caobackupserviceextension.restore;
+package com.couchbase.k8client.restore;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

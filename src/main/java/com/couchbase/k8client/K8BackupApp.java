@@ -1,13 +1,13 @@
-package com.couchbase.caobackupserviceextension;
+package com.couchbase.k8client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CaoBackupServiceExtensionApplication {
+public class K8BackupApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(CaoBackupServiceExtensionApplication.class, args);
+        SpringApplication.run(K8BackupApp.class, args);
     }
 
 }

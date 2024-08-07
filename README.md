@@ -68,17 +68,23 @@ cp $OPERATOR_HOME/crd.yaml crds/
 jbang io.fabric8:java-generator-cli:6.13.1 --source crds --target gen
 ```
 
+![generated Classes](docs/assets/generated-classes.png)
+
 **2. Copy the generated classes to the src folder application:**
 
 ```console
-
+cp -r gen/src/main/java/com/couchbase/ src/main/java/com/couchbase/
 ```
+
+![project src structure](docs/assets/project-structure.png)
 
 ### Running the Application
 
 ```console
 mvn spring-boot:run
 ```
+output::
+![Output](docs/assets/output.png)
 
 ## References
 

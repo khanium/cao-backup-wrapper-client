@@ -1,6 +1,5 @@
-package com.couchbase.caobackupserviceextension.config;
+package com.couchbase.k8client.config;
 
-import com.couchbase.caobackupserviceextension.backup.BackupService;
 //import io.kubernetes.client.openapi.ApiClient;
 //import io.kubernetes.client.openapi.apis.CoreV1Api;
 //import io.kubernetes.client.openapi.models.V1Service;
@@ -11,11 +10,7 @@ import com.couchbase.caobackupserviceextension.backup.BackupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.io.FileReader;
-import java.io.IOException;
+        import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @ConfigurationPropertiesScan
